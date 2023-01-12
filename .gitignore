@@ -26,3 +26,6 @@
 hs_err_pid*
 replay_pid*
 /target/
+electronicsstore.iml
+src/main/main.iml
+src/test/test.iml
