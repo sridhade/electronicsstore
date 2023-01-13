@@ -6,6 +6,7 @@ import com.ecommerce.electronicsstore.entity.Product;
 import com.ecommerce.electronicsstore.repository.BasketRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -17,6 +18,7 @@ import java.util.Optional;
 
 import static org.mockito.Mockito.*;
 
+@DisplayName("Basket Service Unit Tests")
 class BasketServiceTest {
     @Mock
     ProductService productService;

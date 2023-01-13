@@ -17,6 +17,7 @@ import static org.mockito.Mockito.verify;
 
 
 @ExtendWith(MockitoExtension.class)
+@DisplayName("Product Service Unit Tests")
 public class ProductServiceTest {
 
     @InjectMocks

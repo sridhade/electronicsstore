@@ -2,6 +2,7 @@ package com.ecommerce.electronicsstore.controller;
 
 import com.ecommerce.electronicsstore.entity.Basket;
 import com.ecommerce.electronicsstore.service.BasketService;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(BasketController.class)
 @ExtendWith(SpringExtension.class)
+@DisplayName("Basket Rest API Controller Unit Tests")
 public class BasketControllerTest {
     @Autowired
     private MockMvc mvc;
