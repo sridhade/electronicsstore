@@ -20,8 +20,8 @@ import org.springframework.http.ResponseEntity;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@DisplayName("Basket Interaction API Tests")
-public class BasketAPITest {
+@DisplayName("Customer Operations Tests")
+public class CustomerOperationsTest {
 
     @Autowired
     private TestRestTemplate restTemplate;
@@ -32,13 +32,13 @@ public class BasketAPITest {
 
         // Create a new product
         Product product =  Product.builder().name("Sample").price(399.22).build();
-        ResponseEntity<Product> productResponse = restTemplate.postForEntity("/product", product, Product.class);
+        ResponseEntity<Product> productResponse = restTemplate.withBasicAuth("admin","admin").postForEntity("/product", product, Product.class);
         Product createdProduct = productResponse.getBody();
 
         // Add the product to the basket
         AddBasketItemRequest request = new AddBasketItemRequest(createdProduct.getId(), 2, 0);
         HttpEntity<AddBasketItemRequest> httpEntity = new HttpEntity<>(request);
-        ResponseEntity<Basket> addResponse = restTemplate.postForEntity("/basket/add-item",request,Basket.class);
+        ResponseEntity<Basket> addResponse = restTemplate.withBasicAuth("user","user").postForEntity("/basket/add-item",request,Basket.class);
 
         // Assert that the status code is 200 (OK)
         assertEquals(HttpStatus.OK, addResponse.getStatusCode());
@@ -54,18 +54,18 @@ public class BasketAPITest {
 
         // Create a new product
         Product product =  Product.builder().name("Sample").price(399.22).build();
-        ResponseEntity<Product> productResponse = restTemplate.postForEntity("/product", product, Product.class);
+        ResponseEntity<Product> productResponse = restTemplate.withBasicAuth("admin","admin").postForEntity("/product", product, Product.class);
         Product createdProduct = productResponse.getBody();
 
         // Create another new product
         Product product2 =  Product.builder().name("Sample 2 ").price(33.00).build();
-        ResponseEntity<Product> product2Response = restTemplate.postForEntity("/product", product2, Product.class);
+        ResponseEntity<Product> product2Response = restTemplate.withBasicAuth("admin","admin").postForEntity("/product", product2, Product.class);
         Product createdProduct2 = product2Response.getBody();
 
         // Add first product to the basket
         AddBasketItemRequest request = new AddBasketItemRequest(createdProduct.getId(), 2, 0);
         HttpEntity<AddBasketItemRequest> httpEntity = new HttpEntity<>(request);
-        ResponseEntity<Basket> addResponse = restTemplate.postForEntity("/basket/add-item",request,Basket.class);
+        ResponseEntity<Basket> addResponse = restTemplate.withBasicAuth("user","user").postForEntity("/basket/add-item",request,Basket.class);
 
         // Assert that the status code is 200 (OK)
         assertEquals(HttpStatus.OK, addResponse.getStatusCode());
@@ -76,7 +76,7 @@ public class BasketAPITest {
 
         // Add second product to created basket
         request = new AddBasketItemRequest(createdProduct2.getId(), 1, createdBasket.getId());
-        addResponse = restTemplate.postForEntity("/basket/add-item",request,Basket.class);
+        addResponse = restTemplate.withBasicAuth("user","user").postForEntity("/basket/add-item",request,Basket.class);
 
         assertEquals(HttpStatus.OK, addResponse.getStatusCode());
 
@@ -93,24 +93,24 @@ public class BasketAPITest {
 
         // Create a new product
         Product product =  Product.builder().name("Sample").price(399.22).build();
-        ResponseEntity<Product> productResponse = restTemplate.postForEntity("/product", product, Product.class);
+        ResponseEntity<Product> productResponse = restTemplate.withBasicAuth("admin","admin").postForEntity("/product", product, Product.class);
         Product createdProduct = productResponse.getBody();
 
         // Create another new product
         Product product2 =  Product.builder().name("Sample 2 ").price(33.00).build();
-        ResponseEntity<Product> product2Response = restTemplate.postForEntity("/product", product2, Product.class);
+        ResponseEntity<Product> product2Response = restTemplate.withBasicAuth("admin","admin").postForEntity("/product", product2, Product.class);
         Product createdProduct2 = product2Response.getBody();
 
         // Add first product to the basket
         AddBasketItemRequest request = new AddBasketItemRequest(createdProduct.getId(), 2, 0);
         HttpEntity<AddBasketItemRequest> httpEntity = new HttpEntity<>(request);
-        ResponseEntity<Basket> addResponse = restTemplate.postForEntity("/basket/add-item",request,Basket.class);
+        ResponseEntity<Basket> addResponse = restTemplate.withBasicAuth("user","user").postForEntity("/basket/add-item",request,Basket.class);
 
         Basket createdBasket = addResponse.getBody();
 
         // Add second product to created basket
         request = new AddBasketItemRequest(createdProduct2.getId(), 1, createdBasket.getId());
-        addResponse = restTemplate.postForEntity("/basket/add-item",request,Basket.class);
+        addResponse = restTemplate.withBasicAuth("user","user").postForEntity("/basket/add-item",request,Basket.class);
 
         Basket updatedBasket = addResponse.getBody();
 
@@ -118,7 +118,7 @@ public class BasketAPITest {
 
         RemoveBasketItemRequest removeBasketItemRequest = new RemoveBasketItemRequest(createdProduct.getId(),updatedBasket.getId());
 
-        ResponseEntity<Basket> removeResponse =  restTemplate.postForEntity("/basket/remove-item",removeBasketItemRequest,Basket.class);
+        ResponseEntity<Basket> removeResponse =  restTemplate.withBasicAuth("user","user").postForEntity("/basket/remove-item",removeBasketItemRequest,Basket.class);
         updatedBasket = removeResponse.getBody();
         assertEquals(1, updatedBasket.getItems().size());
 
@@ -131,29 +131,29 @@ public class BasketAPITest {
 
         // Create a new product
         Product product =  Product.builder().name("Sample").price(100.00).build();
-        ResponseEntity<Product> productResponse = restTemplate.postForEntity("/product", product, Product.class);
+        ResponseEntity<Product> productResponse = restTemplate.withBasicAuth("admin","admin").postForEntity("/product", product, Product.class);
         Product createdProduct = productResponse.getBody();
 
         // Create another new product
         Product product2 =  Product.builder().name("Sample 2 ").price(50.00).build();
-        ResponseEntity<Product> product2Response = restTemplate.postForEntity("/product", product2, Product.class);
+        ResponseEntity<Product> product2Response = restTemplate.withBasicAuth("admin","admin").postForEntity("/product", product2, Product.class);
         Product createdProduct2 = product2Response.getBody();
 
         // Add first product to the basket
         AddBasketItemRequest request = new AddBasketItemRequest(createdProduct.getId(), 2, 0);
         HttpEntity<AddBasketItemRequest> httpEntity = new HttpEntity<>(request);
-        ResponseEntity<Basket> addResponse = restTemplate.postForEntity("/basket/add-item",request,Basket.class);
+        ResponseEntity<Basket> addResponse = restTemplate.withBasicAuth("user","user").postForEntity("/basket/add-item",request,Basket.class);
 
         Basket createdBasket = addResponse.getBody();
 
         // Add second product to created basket
         request = new AddBasketItemRequest(createdProduct2.getId(), 1, createdBasket.getId());
-        addResponse = restTemplate.postForEntity("/basket/add-item",request,Basket.class);
+        addResponse = restTemplate.withBasicAuth("user","user").postForEntity("/basket/add-item",request,Basket.class);
 
         Basket updatedBasket = addResponse.getBody();
 
         // Get the product by its ID
-        ResponseEntity<Receipt> receiptResponse = restTemplate.getForEntity("/basket/" + updatedBasket.getId() + "/receipt", Receipt.class);
+        ResponseEntity<Receipt> receiptResponse = restTemplate.withBasicAuth("user","user").getForEntity("/basket/" + updatedBasket.getId() + "/receipt", Receipt.class);
 
         // Assert that the status code is 200 (OK)
         assertEquals(HttpStatus.OK, receiptResponse.getStatusCode());
@@ -174,37 +174,37 @@ public class BasketAPITest {
 
         // Create a new product
         Product product =  Product.builder().name("Sample").price(100.00).build();
-        ResponseEntity<Product> productResponse = restTemplate.postForEntity("/product", product, Product.class);
+        ResponseEntity<Product> productResponse = restTemplate.withBasicAuth("admin","admin").postForEntity("/product", product, Product.class);
         Product createdProduct = productResponse.getBody();
 
         // Create another new product
         Product product2 =  Product.builder().name("Sample 2 ").price(50.00).build();
-        ResponseEntity<Product> product2Response = restTemplate.postForEntity("/product", product2, Product.class);
+        ResponseEntity<Product> product2Response = restTemplate.withBasicAuth("admin","admin").postForEntity("/product", product2, Product.class);
         Product createdProduct2 = product2Response.getBody();
 
         // Add a discount
         AddDiscountRequest discountRequest = AddDiscountRequest.builder()
-                                                .discountCode(Constants.BUY_1_GET_1)
-                                                .discountPercent(100d)
-                                                .productId(createdProduct.getId())
-                                                .build();
-        ResponseEntity<Discount> discountResponse = restTemplate.postForEntity("/discounts", discountRequest, Discount.class);
+                .discountCode(Constants.BUY_1_GET_1)
+                .discountPercent(100d)
+                .productId(createdProduct.getId())
+                .build();
+        ResponseEntity<Discount> discountResponse = restTemplate.withBasicAuth("admin","admin").postForEntity("/discounts", discountRequest, Discount.class);
 
         // Add first product to the basket
         AddBasketItemRequest request = new AddBasketItemRequest(createdProduct.getId(), 2, 0);
         HttpEntity<AddBasketItemRequest> httpEntity = new HttpEntity<>(request);
-        ResponseEntity<Basket> addResponse = restTemplate.postForEntity("/basket/add-item",request,Basket.class);
+        ResponseEntity<Basket> addResponse = restTemplate.withBasicAuth("user","user").postForEntity("/basket/add-item",request,Basket.class);
 
         Basket createdBasket = addResponse.getBody();
 
         // Add second product to created basket
         request = new AddBasketItemRequest(createdProduct2.getId(), 1, createdBasket.getId());
-        addResponse = restTemplate.postForEntity("/basket/add-item",request,Basket.class);
+        addResponse = restTemplate.withBasicAuth("user","user").postForEntity("/basket/add-item",request,Basket.class);
 
         Basket updatedBasket = addResponse.getBody();
 
         // Get the product by its ID
-        ResponseEntity<Receipt> receiptResponse = restTemplate.getForEntity("/basket/" + updatedBasket.getId() + "/receipt", Receipt.class);
+        ResponseEntity<Receipt> receiptResponse = restTemplate.withBasicAuth("user","user").getForEntity("/basket/" + updatedBasket.getId() + "/receipt", Receipt.class);
 
         // Assert that the status code is 200 (OK)
         assertEquals(HttpStatus.OK, receiptResponse.getStatusCode());

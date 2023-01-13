@@ -5,7 +5,9 @@ import com.ecommerce.electronicsstore.model.ProductRequest;
 import com.ecommerce.electronicsstore.service.ProductService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 
@@ -18,6 +20,8 @@ public class ProductController {
         this.productService = productService;
     }
 
+
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<Product> createProduct(@RequestBody ProductRequest productRequest) {
         Product product = new Product();
@@ -45,7 +49,7 @@ public class ProductController {
 
 
     @DeleteMapping("/{id}")
-  
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
         Product product = productService.getProductById(id);
         if (product != null) {
