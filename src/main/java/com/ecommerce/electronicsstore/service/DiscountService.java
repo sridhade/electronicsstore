@@ -1,5 +1,6 @@
 package com.ecommerce.electronicsstore.service;
 
+import com.ecommerce.electronicsstore.config.Constants;
 import com.ecommerce.electronicsstore.entity.BasketItem;
 import com.ecommerce.electronicsstore.entity.Discount;
 import com.ecommerce.electronicsstore.repository.DiscountRepository;
@@ -29,15 +30,15 @@ public class DiscountService {
                 if (discount != null) {
                     int quantity = item.getQuantity();
 
-                    if (discount.getDiscountCode().equalsIgnoreCase("buy1get50%off2nd")) {
+                    if (discount.getDiscountCode().equalsIgnoreCase(Constants.BUY_1_GET_50_OFF_2_ND)) {
                         if (quantity > 1) {
                             itemDiscount = (quantity / 2) * (item.getProduct().getPrice() * (discount.getDiscountPercent() / 100));
                         }
-                    } else if (discount.getDiscountCode().equalsIgnoreCase("buy3get25%off")) {
+                    } else if (discount.getDiscountCode().equalsIgnoreCase(Constants.BUY_3_GET_25_OFF)) {
                         if (quantity >= 3) {
                             itemDiscount = (item.getProduct().getPrice() * (discount.getDiscountPercent() / 100)) * quantity;
                         }
-                    } else if  (discount.getDiscountCode().equalsIgnoreCase("buy1get1")) {
+                    } else if  (discount.getDiscountCode().equalsIgnoreCase(Constants.BUY_1_GET_1)) {
                         if (quantity >= 1) {
                             itemDiscount = (quantity / 2) * item.getProduct().getPrice();
                         }

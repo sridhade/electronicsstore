@@ -1,5 +1,6 @@
 package com.ecommerce.electronicsstore.api;
 
+import com.ecommerce.electronicsstore.config.Constants;
 import com.ecommerce.electronicsstore.entity.Basket;
 import com.ecommerce.electronicsstore.entity.Discount;
 import com.ecommerce.electronicsstore.entity.Product;
@@ -183,7 +184,7 @@ public class BasketAPITest {
 
         // Add a discount
         AddDiscountRequest discountRequest = AddDiscountRequest.builder()
-                                                .discountCode("buy1get1")
+                                                .discountCode(Constants.BUY_1_GET_1)
                                                 .discountPercent(100d)
                                                 .productId(createdProduct.getId())
                                                 .build();

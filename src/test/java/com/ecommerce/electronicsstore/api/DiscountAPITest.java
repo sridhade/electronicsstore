@@ -1,5 +1,6 @@
 package com.ecommerce.electronicsstore.api;
 
+import com.ecommerce.electronicsstore.config.Constants;
 import com.ecommerce.electronicsstore.entity.Discount;
 import com.ecommerce.electronicsstore.entity.Product;
 import org.junit.jupiter.api.DisplayName;
@@ -29,7 +30,7 @@ public class DiscountAPITest {
         Product createdProduct = response.getBody();
 
         Discount discount = Discount.builder()
-                .discountCode("BOGO")
+                .discountCode(Constants.BUY_1_GET_1)
                 .discountPercent(100d)
                 .productId(createdProduct.getId())
                 .build();
@@ -40,7 +41,7 @@ public class DiscountAPITest {
         // Assert that the status code is 201 (Created)
         assertEquals(HttpStatus.CREATED, discountResponseEntity.getStatusCode());
 
-        assertTrue(createdDiscount.getDiscountCode().equalsIgnoreCase("BOGO"));
+        assertTrue(createdDiscount.getDiscountCode().equalsIgnoreCase(Constants.BUY_1_GET_1));
         assertTrue(createdDiscount.getDiscountPercent().equals(100d));
         assertTrue(createdDiscount.getProductId().compareTo(createdProduct.getId())==0);
     }
