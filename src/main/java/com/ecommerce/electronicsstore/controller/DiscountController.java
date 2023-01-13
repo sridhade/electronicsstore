@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/discounts")
+@RequestMapping("/discounts")
 public class DiscountController {
     private final DiscountService discountService;
 
@@ -26,6 +26,7 @@ public class DiscountController {
                     Discount.builder()
                             .discountCode(discountRequest.getDiscountCode())
                             .productId(discountRequest.getProductId())
+                            .discountPercent(discountRequest.getDiscountPercent())
                             .build()
                 );
             return new ResponseEntity<>(discount, HttpStatus.CREATED);
