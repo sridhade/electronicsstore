@@ -1,6 +1,8 @@
 package com.ecommerce.electronicsstore.controller;
 
 import com.ecommerce.electronicsstore.entity.Basket;
+import com.ecommerce.electronicsstore.exception.BasketNotFoundException;
+import com.ecommerce.electronicsstore.exception.ProductNotFoundException;
 import com.ecommerce.electronicsstore.model.AddBasketItemRequest;
 import com.ecommerce.electronicsstore.model.Receipt;
 import com.ecommerce.electronicsstore.model.RemoveBasketItemRequest;
@@ -23,7 +25,7 @@ public class BasketController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Basket> getBasketById(@PathVariable long id) {
+    public ResponseEntity<Basket> getBasketById(@PathVariable long id) throws BasketNotFoundException {
         Basket basket = basketService.getBasketById(id);
         if (basket == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -32,7 +34,7 @@ public class BasketController {
     }
 
     @PostMapping("/add-item")
-    public ResponseEntity<Basket> addProductToBasket(@RequestBody AddBasketItemRequest request) {
+    public ResponseEntity<Basket> addProductToBasket(@RequestBody AddBasketItemRequest request) throws BasketNotFoundException, ProductNotFoundException {
         Basket basket = basketService.addItemToBasket(
                 request.getProductId(),
                 request.getQuantity(), request.getBasketId());
@@ -41,13 +43,13 @@ public class BasketController {
     }
 
     @PostMapping("/remove-item")
-    public ResponseEntity<Basket> removeItemFromBasket(@RequestBody RemoveBasketItemRequest request) {
+    public ResponseEntity<Basket> removeItemFromBasket(@RequestBody RemoveBasketItemRequest request) throws BasketNotFoundException, ProductNotFoundException {
         Basket basket = basketService.removeItemFromBasket(request.getProductId(), request.getBasketId());
         return new ResponseEntity<>(basket, HttpStatus.OK);
     }
 
     @GetMapping("/{id}/receipt")
-    public ResponseEntity<Receipt> calculateReceipt(@PathVariable Long id) {
+    public ResponseEntity<Receipt> calculateReceipt(@PathVariable Long id) throws BasketNotFoundException {
         Basket basket = basketService.getBasketById(id);
         if (basket == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

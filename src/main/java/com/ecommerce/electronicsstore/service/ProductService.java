@@ -1,6 +1,7 @@
 package com.ecommerce.electronicsstore.service;
 
 import com.ecommerce.electronicsstore.entity.Product;
+import com.ecommerce.electronicsstore.exception.ProductNotFoundException;
 import com.ecommerce.electronicsstore.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
@@ -20,8 +21,8 @@ public class ProductService {
         return productRepository.save(product);
     }
 
-    public Product getProductById(Long id) {
-        return productRepository.findById(id).orElse(null);
+    public Product getProductById(Long id) throws ProductNotFoundException {
+         return  productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException("Product not found with id " + id));
     }
 
     public List<Product> getAllProducts() {
@@ -29,7 +30,8 @@ public class ProductService {
     }
 
 
-    public void deleteProduct(Long id) {
+    public void deleteProduct(Long id) throws ProductNotFoundException {
+        Product product = getProductById(id);
         productRepository.deleteById(id);
     }
 }

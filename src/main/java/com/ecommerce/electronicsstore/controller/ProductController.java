@@ -1,6 +1,7 @@
 package com.ecommerce.electronicsstore.controller;
 
 import com.ecommerce.electronicsstore.entity.Product;
+import com.ecommerce.electronicsstore.exception.ProductNotFoundException;
 import com.ecommerce.electronicsstore.model.ProductRequest;
 import com.ecommerce.electronicsstore.service.ProductService;
 import org.springframework.http.HttpStatus;
@@ -32,13 +33,9 @@ public class ProductController {
         return new ResponseEntity<>(createdProduct, HttpStatus.CREATED);
     }
     @GetMapping("/{id}")
-    public ResponseEntity<Product> getProductById(@PathVariable Long id) {
+    public ResponseEntity<Product> getProductById(@PathVariable Long id) throws ProductNotFoundException {
         Product product = productService.getProductById(id);
-        if (product != null) {
-            return new ResponseEntity<>(product, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<>(product, HttpStatus.OK);
     }
 
     @GetMapping
@@ -50,15 +47,9 @@ public class ProductController {
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
-        Product product = productService.getProductById(id);
-        if (product != null) {
+    public ResponseEntity<Void> deleteProduct(@PathVariable Long id) throws ProductNotFoundException {
             productService.deleteProduct(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
     }
 
 }

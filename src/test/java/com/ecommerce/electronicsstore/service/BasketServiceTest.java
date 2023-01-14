@@ -3,6 +3,8 @@ package com.ecommerce.electronicsstore.service;
 import com.ecommerce.electronicsstore.entity.Basket;
 import com.ecommerce.electronicsstore.entity.BasketItem;
 import com.ecommerce.electronicsstore.entity.Product;
+import com.ecommerce.electronicsstore.exception.BasketNotFoundException;
+import com.ecommerce.electronicsstore.exception.ProductNotFoundException;
 import com.ecommerce.electronicsstore.repository.BasketRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,7 +35,7 @@ class BasketServiceTest {
     }
 
     @Test
-    void TestAddItemToBasket() {
+    void TestAddItemToBasket() throws ProductNotFoundException, BasketNotFoundException {
         when(productService.getProductById(anyLong()))
                 .thenReturn(new
                         Product(Long.valueOf(1),
@@ -48,7 +50,7 @@ class BasketServiceTest {
     }
 
     @Test
-    void TestAddItemToBasket_ProductAlreadyExistsInBasket() {
+    void TestAddItemToBasket_ProductAlreadyExistsInBasket() throws ProductNotFoundException, BasketNotFoundException {
         when(productService.getProductById(anyLong()))
                 .thenReturn(new
                         Product(Long.valueOf(1),
@@ -88,7 +90,7 @@ class BasketServiceTest {
     }
 
     @Test
-    void TestGetBasketById() {
+    void TestGetBasketById() throws BasketNotFoundException {
         when(basketRepository.findById(anyLong()))
                 .thenReturn(Optional.ofNullable(Basket.builder()
                         .id(1L)
@@ -122,7 +124,7 @@ class BasketServiceTest {
     }
 
     @Test
-    void TestRemoveItemFromBasket() {
+    void TestRemoveItemFromBasket() throws BasketNotFoundException, ProductNotFoundException {
 
         when(basketRepository.findById(anyLong()))
                 .thenReturn(Optional.ofNullable(Basket.builder()

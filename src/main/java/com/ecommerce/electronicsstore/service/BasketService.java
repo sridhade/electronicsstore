@@ -3,6 +3,8 @@ package com.ecommerce.electronicsstore.service;
 import com.ecommerce.electronicsstore.entity.Basket;
 import com.ecommerce.electronicsstore.entity.BasketItem;
 import com.ecommerce.electronicsstore.entity.Product;
+import com.ecommerce.electronicsstore.exception.BasketNotFoundException;
+import com.ecommerce.electronicsstore.exception.ProductNotFoundException;
 import com.ecommerce.electronicsstore.repository.BasketRepository;
 import org.springframework.stereotype.Service;
 
@@ -23,11 +25,9 @@ public class BasketService {
 
     }
 
-    public Basket addItemToBasket(long productId, int quantity, long basketId) {
+    public Basket addItemToBasket(long productId, int quantity, long basketId) throws ProductNotFoundException, BasketNotFoundException {
         Product product = productService.getProductById(productId);
-        if (product == null) {
-            throw new IllegalArgumentException("Product not found");
-        }
+
         Basket basket;
         if (basketId == 0) {
             basket = new Basket();
@@ -56,14 +56,17 @@ public class BasketService {
         return basket;
     }
 
-    public Basket getBasketById(long id) {
-        return basketRepository.findById(id).orElse(null);
+    public Basket getBasketById(long id)  throws BasketNotFoundException {
+       return basketRepository.findById(id).orElseThrow(() -> new BasketNotFoundException("Basket not found with id " + id));
     }
-    public Basket removeItemFromBasket(long productId, long basketId) {
+    public Basket removeItemFromBasket(long productId, long basketId)
+       throws BasketNotFoundException, ProductNotFoundException {
+
+        Product product = productService.getProductById(productId);
         Basket basket = getBasketById(basketId);
 
         List<BasketItem> items = basket.getItems();
-        Predicate<BasketItem> basketItemPredicate = item -> item.getProduct().getId() == productId;
+        Predicate<BasketItem> basketItemPredicate = item -> item.getProduct().getId() == product.getId();
         items.removeIf(basketItemPredicate);
 
         updateBasketTotalPrice(basket);
