@@ -3,6 +3,7 @@ package com.ecommerce.electronicsstore.api;
 import com.ecommerce.electronicsstore.config.Constants;
 import com.ecommerce.electronicsstore.entity.Discount;
 import com.ecommerce.electronicsstore.entity.Product;
+import com.ecommerce.electronicsstore.exception.ErrorResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -185,4 +187,21 @@ public class AdminUserOperationsTest {
         assertEquals(HttpStatus.FORBIDDEN, discountResponseEntity.getStatusCode());
 
     }
+
+    @Test
+    @DisplayName("Get Product with invalid product id -> 404 NOT_FOUND")
+    void TestProductNotFound() {
+        // request to a non-existing product
+        ResponseEntity<ErrorResponse> response = testRestTemplate
+                    .withBasicAuth("admin","admin")
+                    .getForEntity("/product/999", ErrorResponse.class);
+
+        // assert that the response has a status of NOT_FOUND
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+
+        // assert that the error message is "Product not found"
+        ErrorResponse errorResponse = response.getBody();
+        assertThat(errorResponse.getMessage()).contains("Product not found");
+    }
 }
+

@@ -4,6 +4,7 @@ import com.ecommerce.electronicsstore.config.Constants;
 import com.ecommerce.electronicsstore.entity.Basket;
 import com.ecommerce.electronicsstore.entity.Discount;
 import com.ecommerce.electronicsstore.entity.Product;
+import com.ecommerce.electronicsstore.exception.ErrorResponse;
 import com.ecommerce.electronicsstore.model.AddBasketItemRequest;
 import com.ecommerce.electronicsstore.model.AddDiscountRequest;
 import com.ecommerce.electronicsstore.model.Receipt;
@@ -17,6 +18,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -217,5 +219,21 @@ public class CustomerOperationsTest {
 
         assertEquals(2,receipt.getItems().size());
 
+    }
+
+    @Test
+    @DisplayName("Get Basket with invalid basket id -> 404 NOT_FOUND ")
+    void TestBasketNotFound() {
+        // request to a non-existing basket
+        ResponseEntity<ErrorResponse> response = restTemplate
+                        .withBasicAuth("user","user")
+                        .getForEntity("/basket/999", ErrorResponse.class);
+
+        // assert that the response has a status of NOT_FOUND
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+
+        // assert that the error message is "Basket not found"
+        ErrorResponse errorResponse = response.getBody();
+        assertThat(errorResponse.getMessage()).contains("Basket not found");
     }
 }
